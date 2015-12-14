@@ -1,25 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnieto <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: fnieto <fnieto@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/13 06:03:38 by fnieto            #+#    #+#             */
-/*   Updated: 2015/12/14 21:43:23 by fnieto           ###   ########.fr       */
+/*   Created: 2015/11/25 20:10:19 by fnieto            #+#    #+#             */
+/*   Updated: 2015/12/04 07:54:26 by fnieto           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# include "libft/libft.h"
-# include <string.h>
-# define BUFF_SIZE 32
+#include "libft.h"
 
-typedef	struct		s_fdinfo
+int		ft_strcmp(const char *s1, const char *s2)
 {
-	int				fd;
-	char			**buf;
-}					t_fdinfo;
-
-#endif
+	return (ft_memcmp(s1, s2, ft_strlen(s1) + 1));
+}

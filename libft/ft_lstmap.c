@@ -1,25 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnieto <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: fnieto <fnieto@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/13 06:03:38 by fnieto            #+#    #+#             */
-/*   Updated: 2015/12/14 21:43:23 by fnieto           ###   ########.fr       */
+/*   Created: 2015/11/28 23:08:33 by fnieto            #+#    #+#             */
+/*   Updated: 2015/12/04 07:30:58 by fnieto           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# include "libft/libft.h"
-# include <string.h>
-# define BUFF_SIZE 32
+#include "libft.h"
 
-typedef	struct		s_fdinfo
+t_list	*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
 {
-	int				fd;
-	char			**buf;
-}					t_fdinfo;
+	t_list	*new;
 
-#endif
+	if (!lst || !f)
+		return (0);
+	new = (*f)(lst);
+	if (!new)
+		return (0);
+	new->next = ft_lstmap(lst->next, f);
+	return (new);
+}

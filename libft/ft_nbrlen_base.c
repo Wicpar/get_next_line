@@ -1,25 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_nbrlen_base.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fnieto <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/13 06:03:38 by fnieto            #+#    #+#             */
-/*   Updated: 2015/12/14 21:43:23 by fnieto           ###   ########.fr       */
+/*   Created: 2015/11/30 17:43:10 by fnieto            #+#    #+#             */
+/*   Updated: 2015/12/02 18:00:33 by fnieto           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# include "libft/libft.h"
-# include <string.h>
-# define BUFF_SIZE 32
+#include "libft.h"
 
-typedef	struct		s_fdinfo
+size_t	ft_nbrlen_base(int nbr, size_t base)
 {
-	int				fd;
-	char			**buf;
-}					t_fdinfo;
+	int		cnt;
 
-#endif
+	if (base < 2 || nbr == 0)
+		return (base < 2 ? 0 : 1);
+	cnt = nbr < 0;
+	while (nbr)
+	{
+		cnt++;
+		nbr /= base;
+	}
+	return (cnt);
+}

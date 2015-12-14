@@ -1,25 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnieto <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: fnieto <fnieto@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/13 06:03:38 by fnieto            #+#    #+#             */
-/*   Updated: 2015/12/14 21:43:23 by fnieto           ###   ########.fr       */
+/*   Created: 2015/11/28 22:17:05 by fnieto            #+#    #+#             */
+/*   Updated: 2015/12/02 18:17:08 by fnieto           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# include "libft/libft.h"
-# include <string.h>
-# define BUFF_SIZE 32
+#include "libft.h"
+#include <unistd.h>
 
-typedef	struct		s_fdinfo
+void	ft_putstr_fd(char const *s, int fd)
 {
-	int				fd;
-	char			**buf;
-}					t_fdinfo;
-
-#endif
+	write(fd, (unsigned char*)s, ft_strlen(s));
+}

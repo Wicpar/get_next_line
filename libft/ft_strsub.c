@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_strsub.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnieto <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: fnieto <fnieto@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/13 06:03:38 by fnieto            #+#    #+#             */
-/*   Updated: 2015/12/14 21:43:23 by fnieto           ###   ########.fr       */
+/*   Created: 2015/11/26 15:20:10 by fnieto            #+#    #+#             */
+/*   Updated: 2015/12/04 07:26:31 by fnieto           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# include "libft/libft.h"
-# include <string.h>
-# define BUFF_SIZE 32
+#include "libft.h"
 
-typedef	struct		s_fdinfo
+char	*ft_strsub(char const *s, unsigned int start, size_t len)
 {
-	int				fd;
-	char			**buf;
-}					t_fdinfo;
+	char	*res;
 
-#endif
+	res = ft_strnew(len);
+	if (res)
+		ft_strncpy(res, s + start, len);
+	if (res)
+		res[len + 1] = 0;
+	return (res);
+}

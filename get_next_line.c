@@ -6,7 +6,7 @@
 /*   By: fnieto <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/13 06:02:26 by fnieto            #+#    #+#             */
-/*   Updated: 2015/12/13 07:00:27 by fnieto           ###   ########.fr       */
+/*   Updated: 2015/12/14 22:46:20 by fnieto           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,64 +14,70 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-t_fdinfo	*addinfo(int const fd, t_fdinfo **fds)
+static char		**getbuflines(int fd)
 {
-	t_fdinfo	*tmp;
-	size_t		i;
+	int		i;
+	size_t	n;
+	char	buf[BUFF_SIZE + 1];
+	char	**tmp;
 
-	tmp = (t_fdinfo*)malloc(sizeof(t_fdinfo));
-	if (tmp)
-	{
-		tmp->i = 0;
-		tmp->fd = fd;
-		tmp->buf = (char*)malloc(sizeof(char) * (BUFF_SIZE + 1));
-		if (tmp->buf)
-		{
-			i = 0;
-			while (i <= BUFF_SIZE)
-				tmp->buf[i++] = 0;
-		}
-		else
+	n = 0;
+	while (n < BUFF_SIZE && (i = read(fd, &buf[n], BUFF_SIZE - n)) && (n += i))
+		if (i < 0)
 			return (0);
-		tmp->next = *fds;
+	i = 2;
+	n = -1;
+	while (++n && buf[n])
+		if (buf[n] == '\n')
+			buf[n] = !(++i);
+	tmp = (char**)ft_memalloc(sizeof(char*) * i);
+	n = 0;
+	i = -1;
+	while (n < BUFF_SIZE)
+	{
+		tmp[++i] = ft_strdup(&buf[n]);
+		n += ft_strchr(&buf[n] + 1, 0) - &buf[n];
 	}
-	*fds = tmp;
 	return (tmp);
 }
 
-void		reloadBuffer(t_fdinfo *info)
+static t_list	*addinfo(int const fd, t_list **fds)
 {
-	size_t	i;
-	size_t	j;
+	t_fdinfo	info;
+	t_list		*tmp;
 
-	info->i = 0;
-	i = 0;
-	while ((i = (i + (j = read(info->fd, &info->buf[i], BUFF_SIZE - i))))
-			< BUFF_SIZE)
-		if (j == 0)
-			break;
-	while (i < BUFF_SIZE)
-		info->buf[i++] = 0;
+	info.fd = fd;
+	info.buf = getbuflines(fd);
+	ft_lstadd(fds, tmp = ft_lstnew(&info, sizeof(t_fdinfo)));
+	return (tmp);
 }
 
-int			get_next_line(int const fd, char **line)
+int				get_next_line(int const fd, char **line)
 {
-	static t_fdinfo	*fds[1];
+	static t_list	*fds[1];
 	size_t			tmp;
-	t_fdinfo		*info;
+	t_list			*info;
+	t_fdinfo		*elem;
 	char			*new;
 
+	if (fd < 0 || BUFF_SIZE < 1)
+		return (-1);
 	info = *fds;
 	while (info)
 	{
-		if (info->fd == fd)
+		if (((t_fdinfo*)info->content)->fd == fd)
 			break;
 		info = info->next;
 	}
 	if (!info && !(info = addinfo(fd, fds)))
 		return (-1);
-	if (info->i < BUFF_SIZE)
-
+	elem = (t_fdinfo*)info->content;
+	if (elem->buf)
+	{
+		
+	}
+	else
+		return (-1);
 }
 
 

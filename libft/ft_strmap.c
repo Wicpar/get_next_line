@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_strmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnieto <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: fnieto <fnieto@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/13 06:03:38 by fnieto            #+#    #+#             */
-/*   Updated: 2015/12/14 21:43:23 by fnieto           ###   ########.fr       */
+/*   Created: 2015/11/26 15:05:55 by fnieto            #+#    #+#             */
+/*   Updated: 2015/12/01 17:27:22 by fnieto           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# include "libft/libft.h"
-# include <string.h>
-# define BUFF_SIZE 32
+#include "libft.h"
 
-typedef	struct		s_fdinfo
+char	*ft_strmap(char const *s, char (*f)(char))
 {
-	int				fd;
-	char			**buf;
-}					t_fdinfo;
+	char	*res;
+	char	*tmp;
 
-#endif
+	res = ft_strnew(ft_strlen(s));
+	if (!res)
+		return (0);
+	tmp = res;
+	while (*s)
+		*tmp++ = (*f)(*s++);
+	return (res);
+}

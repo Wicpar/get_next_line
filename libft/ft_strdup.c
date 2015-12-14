@@ -1,25 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnieto <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: fnieto <fnieto@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/13 06:03:38 by fnieto            #+#    #+#             */
-/*   Updated: 2015/12/14 21:43:23 by fnieto           ###   ########.fr       */
+/*   Created: 2015/11/25 13:37:27 by fnieto            #+#    #+#             */
+/*   Updated: 2015/12/02 19:03:37 by fnieto           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# include "libft/libft.h"
-# include <string.h>
-# define BUFF_SIZE 32
+#include "libft.h"
+#include <stdlib.h>
 
-typedef	struct		s_fdinfo
+char	*ft_strdup(const char *s)
 {
-	int				fd;
-	char			**buf;
-}					t_fdinfo;
+	int		len;
+	char	*out;
 
-#endif
+	len = ft_strlen(s);
+	out = ft_strnew(len);
+	return (out ? ft_strcpy(out, s) : 0);
+}

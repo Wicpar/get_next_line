@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fnieto <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: fnieto <fnieto@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/13 06:03:38 by fnieto            #+#    #+#             */
-/*   Updated: 2015/12/14 21:43:23 by fnieto           ###   ########.fr       */
+/*   Created: 2015/11/26 15:28:50 by fnieto            #+#    #+#             */
+/*   Updated: 2015/11/26 15:32:10 by fnieto           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# include "libft/libft.h"
-# include <string.h>
-# define BUFF_SIZE 32
+#include "libft.h"
 
-typedef	struct		s_fdinfo
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	int				fd;
-	char			**buf;
-}					t_fdinfo;
+	char	*res;
 
-#endif
+	res = ft_strnew(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (res)
+		ft_strcpy(res, s1);
+	if (res)
+		ft_strcat(res, s2);
+	return (res);
+}
