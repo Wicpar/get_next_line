@@ -6,7 +6,7 @@
 /*   By: fnieto <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/13 06:02:26 by fnieto            #+#    #+#             */
-/*   Updated: 2015/12/14 22:46:20 by fnieto           ###   ########.fr       */
+/*   Updated: 2015/12/17 21:51:55 by fnieto           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ static char		**getbuflines(int fd)
 	n = 0;
 	while (n < BUFF_SIZE && (i = read(fd, &buf[n], BUFF_SIZE - n)) && (n += i))
 		if (i < 0)
+			return ((char**)1);
+		else if (i == 0)
 			return (0);
 	i = 2;
 	n = -1;
@@ -52,6 +54,33 @@ static t_list	*addinfo(int const fd, t_list **fds)
 	return (tmp);
 }
 
+static int		handle(t_fdinfo *info, char **line)
+{
+	char	*tmp;
+	char	**buf;
+	size_t	bufsize;
+
+	buf = info->buf;
+	*line = buf[0];
+	while (buf[1] == 0)
+	{
+		free(buf);
+		buf = getbuflines(info->fd);
+		if (buf <= (char**)1)
+			return (-((int)buf));
+		tmp = *line;
+		*line = ft_strjoin(tmp, buf[0]);
+		ft_memdel((void**)&tmp);
+		ft_memdel((void**)&buf[0]);
+	}
+	bufsize = 1;
+	while (buf[bufsize])
+		++bufsize;
+	ft_memmove(&buf[0], &buf[1], bufsize + 1);
+	info->buf = buf;
+	return (1);
+}
+
 int				get_next_line(int const fd, char **line)
 {
 	static t_list	*fds[1];
@@ -73,11 +102,7 @@ int				get_next_line(int const fd, char **line)
 		return (-1);
 	elem = (t_fdinfo*)info->content;
 	if (elem->buf)
-	{
-		
-	}
+		return (handle(elem, line));
 	else
 		return (-1);
 }
-
-
