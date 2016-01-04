@@ -6,7 +6,7 @@
 /*   By: fnieto <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/04 08:22:36 by fnieto            #+#    #+#             */
-/*   Updated: 2016/01/04 12:59:25 by fnieto           ###   ########.fr       */
+/*   Updated: 2016/01/04 13:23:51 by fnieto           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ t_fd			*get_current(t_list **fds, int const fd)
 	while (current)
 	{
 		if (((t_fd*)current->content)->fd == fd)
-			break;
+			break ;
 		current = current->next;
 	}
 	if (!current)
