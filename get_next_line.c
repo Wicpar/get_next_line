@@ -5,104 +5,106 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fnieto <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/13 06:02:26 by fnieto            #+#    #+#             */
-/*   Updated: 2015/12/17 21:51:55 by fnieto           ###   ########.fr       */
+/*   Created: 2016/01/04 08:22:36 by fnieto            #+#    #+#             */
+/*   Updated: 2016/01/04 12:59:25 by fnieto           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdlib.h>
 #include <unistd.h>
 
-static char		**getbuflines(int fd)
+char			**split(char *str)
 {
-	int		i;
 	size_t	n;
-	char	buf[BUFF_SIZE + 1];
-	char	**tmp;
-
-	n = 0;
-	while (n < BUFF_SIZE && (i = read(fd, &buf[n], BUFF_SIZE - n)) && (n += i))
-		if (i < 0)
-			return ((char**)1);
-		else if (i == 0)
-			return (0);
-	i = 2;
-	n = -1;
-	while (++n && buf[n])
-		if (buf[n] == '\n')
-			buf[n] = !(++i);
-	tmp = (char**)ft_memalloc(sizeof(char*) * i);
-	n = 0;
-	i = -1;
-	while (n < BUFF_SIZE)
-	{
-		tmp[++i] = ft_strdup(&buf[n]);
-		n += ft_strchr(&buf[n] + 1, 0) - &buf[n];
-	}
-	return (tmp);
-}
-
-static t_list	*addinfo(int const fd, t_list **fds)
-{
-	t_fdinfo	info;
-	t_list		*tmp;
-
-	info.fd = fd;
-	info.buf = getbuflines(fd);
-	ft_lstadd(fds, tmp = ft_lstnew(&info, sizeof(t_fdinfo)));
-	return (tmp);
-}
-
-static int		handle(t_fdinfo *info, char **line)
-{
+	size_t	i;
+	size_t	len;
+	char	**new;
 	char	*tmp;
-	char	**buf;
-	size_t	bufsize;
 
-	buf = info->buf;
-	*line = buf[0];
-	while (buf[1] == 0)
+	len = ft_strlen(str);
+	n = 0;
+	tmp = str - 1;
+	while (++tmp && *tmp)
+		if (*tmp == '\n')
+		{
+			*tmp = 0;
+			++n;
+		}
+	new = (char**)ft_memalloc((n + 2) * sizeof(char*));
+	i = -1;
+	tmp = str;
+	while (++i <= n)
 	{
-		free(buf);
-		buf = getbuflines(info->fd);
-		if (buf <= (char**)1)
-			return (-((int)buf));
-		tmp = *line;
-		*line = ft_strjoin(tmp, buf[0]);
-		ft_memdel((void**)&tmp);
-		ft_memdel((void**)&buf[0]);
+		new[i] = ft_strdup(tmp);
+		tmp = (char*)ft_memchr(tmp, 0, len - (str - tmp)) + 1;
 	}
-	bufsize = 1;
-	while (buf[bufsize])
-		++bufsize;
-	ft_memmove(&buf[0], &buf[1], bufsize + 1);
-	info->buf = buf;
+	return (new);
+}
+
+int				append_next_batch(t_fd *fd)
+{
+	char	buf[BUFF_SIZE + 1];
+	int		n;
+	char	*tmp;
+	char	**newbuf;
+
+	n = read(fd->fd, buf, BUFF_SIZE);
+	if (n > 0)
+	{
+		newbuf = split(buf);
+		tmp = ft_strjoin(fd->buf[0], newbuf[0]);
+		ft_memdel((void**)newbuf);
+		*newbuf = tmp;
+	}
+	ft_memdel((void**)fd->buf);
+	ft_memdel((void**)&fd->buf);
+	if (n <= 0)
+		return (n);
+	fd->buf = newbuf;
 	return (1);
+}
+
+t_fd			*get_current(t_list **fds, int const fd)
+{
+	t_list			*current;
+	t_fd			new;
+	t_fd			*tmp;
+
+	current = *fds;
+	while (current)
+	{
+		if (((t_fd*)current->content)->fd == fd)
+			break;
+		current = current->next;
+	}
+	if (!current)
+	{
+		new.fd = fd;
+		new.buf = split("");
+		current = ft_lstnew(&new, sizeof(t_fd));
+		ft_lstadd(fds, current);
+	}
+	tmp = (t_fd*)current->content;
+	if (!tmp->buf)
+		tmp->buf = split("");
+	return (tmp);
 }
 
 int				get_next_line(int const fd, char **line)
 {
 	static t_list	*fds[1];
-	size_t			tmp;
-	t_list			*info;
-	t_fdinfo		*elem;
-	char			*new;
+	t_fd			*tmp;
+	int				status;
 
-	if (fd < 0 || BUFF_SIZE < 1)
-		return (-1);
-	info = *fds;
-	while (info)
-	{
-		if (((t_fdinfo*)info->content)->fd == fd)
-			break;
-		info = info->next;
-	}
-	if (!info && !(info = addinfo(fd, fds)))
-		return (-1);
-	elem = (t_fdinfo*)info->content;
-	if (elem->buf)
-		return (handle(elem, line));
-	else
-		return (-1);
+	tmp = get_current(fds, fd);
+	while (tmp->buf[1] == 0 && (status = append_next_batch(tmp)) > 0)
+		;
+	if (status <= 0)
+		return (status);
+	*line = tmp->buf[0];
+	status = 0;
+	while (tmp->buf[status])
+		++status;
+	ft_memmove(tmp->buf, tmp->buf + 1, (status + 1) * sizeof(char*));
+	return (1);
 }
