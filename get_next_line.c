@@ -6,7 +6,7 @@
 /*   By: fnieto <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/04 08:22:36 by fnieto            #+#    #+#             */
-/*   Updated: 2016/01/04 13:23:51 by fnieto           ###   ########.fr       */
+/*   Updated: 2016/01/04 16:25:16 by fnieto           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,16 @@ char			**split(char *str)
 
 	len = ft_strlen(str);
 	n = 0;
-	tmp = str - 1;
-	while (++tmp && *tmp)
+	tmp = str;
+	while (*tmp)
+	{
 		if (*tmp == '\n')
 		{
-			*tmp = 0;
-			++n;
+			*tmp = '\0';
+			n++;
 		}
+		tmp++;
+	}
 	new = (char**)ft_memalloc((n + 2) * sizeof(char*));
 	i = -1;
 	tmp = str;
@@ -49,6 +52,7 @@ int				append_next_batch(t_fd *fd)
 	char	**newbuf;
 
 	n = read(fd->fd, buf, BUFF_SIZE);
+	buf[n] = 0;
 	if (n > 0)
 	{
 		newbuf = split(buf);
