@@ -1,27 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_lstremove.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fnieto <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/13 06:03:38 by fnieto            #+#    #+#             */
-/*   Updated: 2016/01/13 21:00:49 by fnieto           ###   ########.fr       */
+/*   Created: 2016/01/12 18:19:42 by fnieto            #+#    #+#             */
+/*   Updated: 2016/01/12 18:23:49 by fnieto           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# include "libft.h"
-# include <string.h>
-# define BUFF_SIZE 32
+#include "libft.h"
 
-typedef	struct		s_fd
+t_list		*ft_lstremove(t_list **alst)
 {
-	int				fd;
-	t_list			*buf;
-}					t_fd;
+	t_list *tmp;
 
-int					get_next_line(int const fd, char **line);
-
-#endif
+	tmp = *alst;
+	if (tmp)
+	{
+		*alst = tmp->next;
+		tmp->next = 0;
+	}
+	return (tmp);
+}

@@ -1,27 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_lstpush.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fnieto <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/13 06:03:38 by fnieto            #+#    #+#             */
-/*   Updated: 2016/01/13 21:00:49 by fnieto           ###   ########.fr       */
+/*   Created: 2016/01/12 18:02:39 by fnieto            #+#    #+#             */
+/*   Updated: 2016/01/12 18:08:28 by fnieto           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# include "libft.h"
-# include <string.h>
-# define BUFF_SIZE 32
+#include "libft.h"
 
-typedef	struct		s_fd
+void		ft_lstpush(t_list **alst, t_list *new)
 {
-	int				fd;
-	t_list			*buf;
-}					t_fd;
+	t_list *tmp;
 
-int					get_next_line(int const fd, char **line);
-
-#endif
+	if (!(*alst))
+		*alst = new;
+	else
+	{
+		tmp = *alst;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = new;
+	}
+}
